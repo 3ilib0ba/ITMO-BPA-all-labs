@@ -1,0 +1,90 @@
+--------- открыть БЭВМ эмулятор можно
+при помощи команды java -Dmode=cli -jar bcomp-ng.jar в cmd
+
+--------- задание новых микрокоманд
+003D
+ma
+mw 81F0104002
+00F0
+ma
+mw 80F4011040
+mw 0001009411
+mw 0200000000
+mw 80C4101040
+mw 0001009011
+mw 0200000000
+mw 80C4101040
+
+--------- ввод данных через ассемблер(команда asm) (HLT/NOP)
+ORG 0x100
+TT1: WORD 0x0
+TT2: WORD 0x0
+TT3: WORD 0x0
+ORG 0x200
+START: CLA
+
+CALL $TEST1
+LD $TT1
+HLT
+CLC
+CALL $TEST2
+LD $TT2
+HLT
+CLC
+CALL $TEST3
+LD $TT3
+HLT
+HLT
+
+ORG 0x300
+A1: WORD 0x4421
+B1: WORD 0x1111
+RES1: WORD ?
+TEST1: LD A1
+ADD B1
+ST $RES1
+LD A1
+WORD 0x9301
+LD B1
+CMP RES1
+BNE ERR1
+CORR1: LD #0x1
+ST $TT1
+RET
+ERR1: LD #0x0
+ST $TT1
+RET
+
+A2: WORD 0xFFFF
+B2: WORD 0xFFFF
+TEST2: LD A2
+WORD 0x9EFD
+BLO ERR2
+CORR2: LD #0x1
+ST $TT2
+RET
+ERR2: LD #0x0
+ST $TT2
+RET
+
+ORG 0x350
+A3: WORD 0xFFF5
+B3: WORD 0x0015
+RES3: WORD ?
+TEST3: LD A3
+INC
+ADD B3
+ST $RES3
+LD A3
+WORD 0x9351
+LD B3
+BHIS ERR3
+CMP RES3
+BNE ERR3
+CORR3: LD #0x1
+ST $TT3
+RET
+ERR3: LD #0x0
+ST $TT3
+RET
+---------- конец ввода данных(команда END)
