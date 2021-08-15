@@ -1,0 +1,26 @@
+	ORG	0x0
+V0:	WORD	$DEFAULT
+	WORD	0x180
+V1:	WORD	0x200
+	WORD	0x180
+DEFAULT:	IRET
+
+
+	ORG	0x200
+INTER1:	OUT	2
+
+	ORG	0x400
+START:	CLA
+	LD	#0x9
+	OUT	3
+	CLA
+	EI
+INCR:	INC
+	JUMP	INCR
+	HLT
+
+
+--------
+Простейшая обработка прерывания, вывод значения аккумулятора 
+на КВУ-1 и после обработка команд, начиная с IP = 201, а 
+хотелось бы продолжить с 400+...
